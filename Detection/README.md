@@ -1,0 +1,1 @@
+Ici sont stockés les règles de détection sous format Sigma.
