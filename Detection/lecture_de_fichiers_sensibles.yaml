@@ -1,0 +1,54 @@
+title: Critical files data display
+status: test
+description: Detects activities of displaying the content of sensible files
+references:
+    - https://attack.mitre.org/techniques/T1003/
+    - https://www.redteam.tf/red-team-cheatsheet/linux-privilege-escalation/
+logsource:
+    category: process_creation
+    product: linux
+detection:
+    selection_img_1:
+        data.exe.path|endswith:
+            - '/cat'
+            - '/less'
+            - '/more'
+            - '/head'
+            - '/nl'
+            - '/tail'
+            - '/most'
+    selection_paths:
+        data.command_line|contains:
+            - '/etc/passwd'
+            - '/etc/shadow'
+            - '/etc/group'
+            - '/etc/sudoers'
+            - '/etc/ssh/sshd_config'
+            - '~/.ssh/authorized_keys'
+            - '~/.ssh/id_rsa'
+            - '~/.ssh/id_dsa'
+            - '~/.ssh/id_ed25519'
+            - '/etc/mysql/debian.cnf'
+            - '/etc/mysql/my.cnf'
+            - '/etc/postgresql/*/pg_hba.conf'
+            - '/etc/redis/redis.conf'
+            - '/etc/apache2/.htpasswd'
+            - '/etc/nginx/.htpasswd'
+            - '/etc/kubernetes/admin.conf'
+            - '/var/www/html/config.php'
+            - 'wp-config.php'
+            - '/etc/php/*/fpm/pool.d/www.conf'
+            - '/var/log/auth.log'
+            - '/var/log/secure'
+            - '~/.bash_history'
+            - '~/.mysql_history'
+            - '~/.docker/config.json'
+            - '~/.profile'
+            - '~/.bashrc'
+            - '~/.zshrc'
+            - '/etc/postfix/main.cf'
+    condition: 1 of selection_img_* and selection_paths
+falsepositives:
+    - Legitimate administrative activity (e.g., backups, audits)
+    - Automated scripts or tools that interact with /etc/shadow or /etc/passwd
+level: high

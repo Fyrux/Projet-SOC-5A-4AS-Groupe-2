@@ -1,0 +1,1 @@
+data.exe.path IN ("*/firewall-cmd", "*/ufw", "*/iptables", "*/netstat", "*/who", "*/w", "*/last", "*/lsof", "*/ss", "*/ip", "*/ifconfig", "*/systemd-resolve", "*/route") OR data.command_line="*/etc/resolv.conf*"

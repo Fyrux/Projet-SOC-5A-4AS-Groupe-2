@@ -1,0 +1,1 @@
+(data.command_line IN ("*vbox*", "*vm*", "*xen*", "*virtio*", "*hv*") data.exe.path IN ("*/cat", "*/less", "*/more", "*/head", "*/nl", "*/tail", "*/most", "*/grep")) OR data.exe.path IN ("*/uname", "*/lscpu", "*/uptime", "*/lsmod", "*/hostname", "*/env", "*/kmod", "*/lspci", "*/dmidecode")

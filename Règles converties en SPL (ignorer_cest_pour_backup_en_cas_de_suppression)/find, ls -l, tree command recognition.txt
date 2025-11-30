@@ -1,0 +1,1 @@
+(data.exe.path="*/ls" data.command_line="*-R*") OR data.exe.path="*/find" OR data.exe.path="*/tree" OR data.exe.path="*/findmnt" OR data.exe.path="*/mlocate"

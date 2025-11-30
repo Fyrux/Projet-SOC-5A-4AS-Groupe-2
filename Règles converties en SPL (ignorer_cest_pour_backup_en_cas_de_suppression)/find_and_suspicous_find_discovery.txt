@@ -1,0 +1,1 @@
+(data.exe.path="*/find" OR data.exe.path="*/tree" OR data.exe.path="*/findmnt" OR data.exe.path="*/mlocate") OR (data.exe.path="*/find" data.command_line IN ("*-perm -4000*", "*-perm -2000*", "*-perm 0777*", "*-perm -222*", "*-perm -o w*", "*-perm -o x*", "*-perm -u=s*", "*-perm -g=s*"))
