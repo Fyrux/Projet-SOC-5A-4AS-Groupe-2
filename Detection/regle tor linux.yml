@@ -1,0 +1,28 @@
+title: Détection de l'utilisation de TOR sur Linux
+logsource:
+    category: process_creation
+    product: linux
+detection:
+    selection:
+        - data.exe.path|endswith: '/tor'
+        - data.exe.path|endswith: '/torbrowser'
+        - data.exe.path|contains: '/usr/bin/tor'
+        - data.exe.path|contains: '/usr/sbin/tor'
+        - data.exe.path|contains: 'torsocks'
+        - data.exe.path|contains: 'tor-proxy'
+        - data.command_line|contains: 'tor '
+        - data.command_line|contains: '--tor'
+        - data.command_line|contains: 'torsocks'
+        - data.command_line|contains: 'proxychains'
+    network:
+        - data.dst.ip|startswith: '128.31.0.0'
+        - data.dst.ip|startswith: '185.220.100.0'
+        - data.dst.ip|startswith: '192.95.36.0'
+    data.dst.port:
+        - 9050
+        - 9150
+    condition: selection or network
+falsepositives:
+    - Utilisation légitime de TOR (par exemple, pour des raisons de confidentialité).
+    - Logiciels ou scripts utilisant des proxys ou des tunnels réseau.
+level: medium

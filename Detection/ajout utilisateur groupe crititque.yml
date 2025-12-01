@@ -1,0 +1,25 @@
+title: Ajout d'un utilisateur Ã  un groupe critique - Active Directory
+logsource:
+    product: windows
+    service: security
+detection:
+    selection:
+        EventCode: 4728
+        Nom_du_groupe|contains: # Liste des groupes critiques (Ã  adapter selon votre environnement)
+            - 'Domain Admins'
+            - 'Enterprise Admins'
+            - 'Administrators'
+            - 'Schema Admins'
+            - 'Backup Operators'
+            - 'Account Operators'
+            - 'Print Operators'
+            - 'Server Operators'
+            - 'Administrateurs'
+    condition: selection
+falsepositives:
+    - ActivitÃ©s administratives lÃ©gitimes (ex: ajout planifiÃ© d'un utilisateur autorisÃ©)
+    - Scripts automatisÃ©s gÃ©rant les groupes (Ã  exclure si connu)
+level: high
+tags:
+    - attack.persistence
+    - attack.privilege_escalation

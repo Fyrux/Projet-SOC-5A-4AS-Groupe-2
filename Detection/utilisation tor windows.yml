@@ -1,0 +1,31 @@
+title: Détection de l'utilisation de TOR sur Windows
+logsource:
+    product: windows
+    category: process_creation
+    service: sysmon
+detection:
+    selection_process:
+        - EventCode: 1 
+          Nom_du_processus|endswith: '\tor.exe'
+        - EventCode: 1
+          Nom_du_processus|endswith: '\torbrowser\firefox.exe'
+        - EventCode: 1
+          CommandLine|contains: 'tor '
+        - EventCode: 1
+          CommandLine|contains: '--tor'
+    selection_network:
+        - EventCode: 1  # Sysmon Event ID 1 (Process Creation)
+          DestinationPort: 9050
+        - EventCode: 1
+          DestinationPort: 9150
+        - EventCode: 3  # Sysmon Event ID 3 (Network Connection)
+          DestinationIp|startswith: '128.31.0.0/16'
+        - EventCode: 3
+          DestinationIp|startswith: '185.220.100.0/24'
+        - EventCode: 3
+          DestinationIp|startswith: '192.95.36.0/24'
+    condition: selection_process or selection_network
+falsepositives:
+    - Utilisation lÃ©gitime de TOR (par exemple, pour des raisons de confidentialitÃ©).
+    - Logiciels ou scripts utilisant des proxys ou des tunnels rÃ©seau.
+level: high

@@ -29,4 +29,4 @@ detection:
     condition: selection and 1 of selection_paths
 falsepositives:
     - Legitimate administration activities
-level: informational
+level: low

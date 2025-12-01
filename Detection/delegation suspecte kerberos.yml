@@ -1,0 +1,27 @@
+title: Délégation Kerberos suspecte dans Active Directory
+logsource:
+    product: windows
+    service: security
+    definition: 'Requires the "Audit Directory Service Changes" policy to be enabled.'
+detection:
+    selection:
+        EventCode: 5136  # évènement de modification d'un attribut DS
+        Nom_complet_LDAP|contains:
+            - 'userAccountControl'
+            - 'msDS-AllowedToDelegateTo'
+            - 'trustedForDelegation'
+            - 'trustedToAuthForDelegation'
+    filter_main:
+        # Exclure les comptes de service légitimes (Ã  adapter selon votre environnement)
+        Nom_du_compte|startswith:
+            - 'SVC_'
+            - 'SVC-'
+    condition: selection and not filter_main
+falsepositives:
+    - Modifications légitimes par des administrateurs ou des scripts automatisÃ©s.
+    - Comptes de service configurÃ©s pour la délégation (Ã  exclure via la liste `filter_main`).
+level: high
+tags:
+    - attack.lateral_movement
+    - attack.privilege_escalation
+    - attack.t1558.003

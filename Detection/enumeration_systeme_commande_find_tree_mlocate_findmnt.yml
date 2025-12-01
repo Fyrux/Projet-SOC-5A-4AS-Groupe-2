@@ -29,4 +29,4 @@ detection:
     condition: 1 of selection_*
 falsepositives:
     - Legitimate activities
-level: informational
+level: low
