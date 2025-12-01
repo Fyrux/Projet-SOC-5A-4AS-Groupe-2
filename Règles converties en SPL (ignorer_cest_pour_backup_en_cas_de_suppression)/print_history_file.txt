@@ -1,1 +1,0 @@
-data.exe.path IN ("*/cat", "*/head", "*/tail", "*/more") data.command_line IN ("*/.bash_history*", "*/.zsh_history*") OR data.command_line IN ("*_history", "*.history", "*zhistory")

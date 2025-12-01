@@ -1,1 +1,0 @@
-type="EXECVE" data.command_line="*grep*" data.command_line IN ("*password*", "*passd*", "*passwd*")
