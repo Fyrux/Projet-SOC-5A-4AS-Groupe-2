@@ -1,1 +1,1 @@
-Ici seront stockés les script N8N et les templates d'automatisation.
+Ici sont stockés les script N8N et les templates d'automatisation.
