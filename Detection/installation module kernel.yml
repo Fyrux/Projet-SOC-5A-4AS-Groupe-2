@@ -1,0 +1,27 @@
+title: Détection de l'installation ou du chargement de modules kernel
+description: Détecte le chargement ou l'installation de modules kernel via des commandes comme insmod, modprobe, par exemple.
+logsource:
+    category: process_creation
+    product: linux
+detection:
+    selection:
+        - data.exe.path|endswith:
+            - '/insmod'
+            - '/modprobe'
+            - '/rmmod'
+            - '/lsmod'
+        - data.command_line|contains:
+            - 'insmod '
+            - 'modprobe '
+            - 'rmmod '
+    filter_legitimate:
+        data.command_line|contains:
+            - 'update-initramfs'  # Exclure les mises à jour légitimes
+            - 'apt-get upgrade'   # Exclure les mises à jour système
+            - 'yum update'        # Exclure les mises à jour système
+    condition: selection and not filter_legitimate
+falsepositives:
+    - Mises à jour système légitimes
+    - Installation de pilotes matériels par un administrateur
+    - Scripts automatisés de maintenance
+level: high

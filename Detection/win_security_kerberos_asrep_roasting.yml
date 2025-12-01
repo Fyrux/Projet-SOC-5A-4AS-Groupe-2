@@ -8,7 +8,7 @@ logsource:
 detection:
     selection:
         EventID: 4768
-        TicketEncryptionType: '0x17'
+        TicketEncryptionType: '0x25'
         ServiceName: 'krbtgt'
         PreAuthType: 0
     condition: selection
