@@ -1,0 +1,31 @@
+title: LOLBIN Execution From Abnormal Drive
+description: 
+    Detects execution of common LOLBINs (Living-Off-The-Land Binaries) from abnormal locations or by non-standard users.
+    Excludes SYSTEM and specific known admin accounts to reduce false positives.
+tags:
+    - attack.defense-evasion
+    - attack.t1218
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    selection_lolbins:
+        Image|endswith:
+            - '\calc.exe'
+            - '\certutil.exe'
+            - '\cmstp.exe'
+            - '\cscript.exe'
+            - '\installutil.exe'
+            - '\mshta.exe'
+            - '\regsvr32.exe'
+            - '\rundll32.exe'
+            - '\wscript.exe'
+    filter_user:
+        User|in:
+            - 'AUTORITE NT\\Système'
+            - 'SOC\\ADadmin1'
+    condition: selection_lolbins and not filter_user
+falsepositives:
+    - Legitimate execution by administrators outside normal policy
+    - Scheduled tasks or automation scripts using built-in Windows binaries
+level: medium

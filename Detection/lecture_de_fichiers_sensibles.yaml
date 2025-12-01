@@ -1,9 +1,4 @@
 title: Critical files data display
-status: test
-description: Detects activities of displaying the content of sensible files
-references:
-    - https://attack.mitre.org/techniques/T1003/
-    - https://www.redteam.tf/red-team-cheatsheet/linux-privilege-escalation/
 logsource:
     category: process_creation
     product: linux
