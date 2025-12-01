@@ -1,0 +1,18 @@
+title: Potential AS-REP Roasting via Kerberos TGT Requests
+description: |
+    Detects suspicious Kerberos TGT requests with pre-authentication disabled (Pre-Authentication Type = 0) and Ticket Encryption Type (0x17) i.e, RC4-HMAC.
+    This may indicate an AS-REP Roasting attack, where attackers request AS-REP messages for accounts without pre-authentication and attempt to crack the encrypted ticket offline to recover user passwords.
+logsource:
+    product: windows
+    service: security
+detection:
+    selection:
+        EventID: 4768
+        TicketEncryptionType: '0x17'
+        ServiceName: 'krbtgt'
+        PreAuthType: 0
+    condition: selection
+falsepositives:
+    - Legacy systems or applications that legitimately use RC4 encryption
+    - Misconfigured accounts with pre-authentication disabled
+level: medium

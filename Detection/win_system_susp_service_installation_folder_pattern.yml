@@ -1,0 +1,21 @@
+title: Service Installation with Suspicious Folder Pattern
+description: Detects service installation with suspicious folder patterns
+tags:
+    - attack.persistence
+    - attack.privilege-escalation
+    - car.2013-09-005
+    - attack.t1543.003
+logsource:
+    product: windows
+    service: system
+detection:
+    selection_eid:
+        Provider_Name: 'Service Control Manager'
+        EventID: 7045
+    selection_img_paths:
+        - ImagePath|re: '^[Cc]:\\[Pp]rogram[Dd]ata\\.{1,9}\.exe'
+        - ImagePath|re: '^[Cc]:\\.{1,9}\.exe'
+    condition: all of selection_*
+falsepositives:
+    - Unknown
+level: high
