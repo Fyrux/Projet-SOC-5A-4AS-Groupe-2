@@ -1,0 +1,66 @@
+title: Potential Credential Dumping Activity via LSASS (Improved)
+description:
+  Detects suspicious access to the LSASS process based on high-privilege 
+  GrantedAccess flags combined with sensitive CallTrace DLLs commonly observed 
+  during credential dumping attempts (Mimikatz, NanoDump, ProcDump, Invoke-Mimikatz, etc.).
+tags:
+  - attack.credential-access
+  - attack.defense-evasion
+  - attack.t1003
+  - attack.t1003.001
+  - windows
+  - sysmon
+logsource:
+  category: process_access
+  product: windows
+detection:
+  lsass_target:
+    TargetImage|endswith: '\lsass.exe'
+  high_access:
+    GrantedAccess|contains:
+      - '0x1038'
+      - '0x1438'
+      - '0x143a'
+      - '0x1fffff'
+      - '0x103800'
+  calltrace_sensitive:
+    CallTrace|contains:
+      - 'dbgcore.dll'
+      - 'dbghelp.dll'
+      - 'kernel32.dll'
+      - 'kernelbase.dll'
+      - 'ntdll.dll'
+  filter_system_user:
+    SourceUser|contains:
+      - 'AUTHORI'
+      - 'AUTORI'
+      - 'SYSTEM'
+      - 'LOCAL SERVICE'
+  filter_edr_and_sysmon:
+    SourceImage|endswith:
+      - '\Sysmon64.exe'
+      - '\MsMpEng.exe'
+      - '\Microsoft.Tri.Sensor.Updater.exe'
+  filter_asgard:
+    CallTrace|contains|all:
+      - ':\Windows\Temp\asgard2-agent\'
+      - '\thor\thor64.exe+'
+      - '|UNKNOWN('
+    GrantedAccess: '0x103800'
+  condition: lsass_target and high_access and calltrace_sensitive
+             and not 1 of filter_system_user
+             and not 1 of filter_edr_and_sysmon
+             and not filter_asgard
+falsepositives:
+  - Rare forensic tools or crash dump handlers with elevated privileges.
+level: high
+fields:
+  - SourceImage
+  - TargetImage
+  - GrantedAccess
+  - CallTrace
+  - SourceProcessId
+  - TargetProcessId
+  - SourceUser
+  - CommandLine
+

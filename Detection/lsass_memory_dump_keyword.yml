@@ -1,0 +1,58 @@
+title: LSASS Memory Access by Process Containing "dump" in Name
+id: 9bd012ee-0dff-44d7-84a0-aa698cfd87a3
+status: stable
+description: >
+  Detects suspicious access to the LSASS process from executables whose
+  name contains the keyword "dump", commonly seen in credential dumping
+  tools such as procdump or custom dump utilities.
+tags:
+  - attack.credential-access
+  - attack.defense-evasion
+  - attack.t1003
+  - attack.t1003.001
+logsource:
+  category: process_access
+  product: windows
+detection:
+  selection:
+    TargetImage|endswith: '\lsass.exe'
+    SourceImage|contains: 'dump'
+    GrantedAccess|contains:
+      - '10'
+      - '30'
+      - '50'
+      - '70'
+      - '90'
+      - 'B0'
+      - 'D0'
+      - 'F0'
+      - '18'
+      - '38'
+      - '58'
+      - '78'
+      - '98'
+      - 'B8'
+      - 'D8'
+      - 'F8'
+      - '1A'
+      - '3A'
+      - '5A'
+      - '7A'
+      - '9A'
+      - 'BA'
+      - 'DA'
+      - 'FA'
+      - '0x14C2'
+      - '0x1FFFFF'
+      - '0x1038'
+      - '0x1438'
+  whitelist:
+    SourceImage|endswith:
+      - '\Sysmon64.exe'
+      - '\WerFault.exe'
+      - '\wermgr.exe'
+      - '\WmiPrvSE.exe'
+  condition: selection AND NOT whitelist
+falsepositives:
+  - Rare backup/diagnostic dump utilities
+level: high
