@@ -25,7 +25,6 @@ detection:
             - 'wscript'
             - 'cscript'
             - 'svchost'
-            - 'dllhost'
             - 'cmd '
             - 'cmd.exe /c'
             - 'cmd.exe /k'
@@ -38,7 +37,10 @@ detection:
             - '\Microsoft\Windows\Start Menu\Programs\Startup\'
             - 'C:\Windows\TEMP\'
             - '\AppData\Local\Temp'
-    condition: 1 of selection* and susp_binpath
+    legit_path:
+        SecurityID|contains:
+            -"NT AUTHORITY\\SYSTEM"
+    condition: 1 of selection* and susp_binpath and not legit_path
 falsepositives:
     - Unlikely
 level: high
