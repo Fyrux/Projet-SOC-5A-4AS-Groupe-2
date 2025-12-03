@@ -1,4 +1,5 @@
 title: LOLBIN Execution From Abnormal Drive
+version : 2
 description: 
     Detects execution of common LOLBINs (Living-Off-The-Land Binaries) from abnormal locations or by non-standard users.
     Excludes SYSTEM and specific known admin accounts to reduce false positives.
@@ -24,7 +25,13 @@ detection:
         User|in:
             - 'AUTORITE NT\\Système'
             - 'SOC\\ADadmin1'
-    condition: selection_lolbins and not filter_user
+    filter_legit_paths:
+        Image|startswith:
+            - 'C:\Windows\System32'
+            - 'C:\Windows\SysWOW64'
+            - 'C:\Program Files'
+            - 'C:\Program Files (x86)'
+    condition: selection_lolbins and not filter_user and not filter_legit_paths
 falsepositives:
     - Legitimate execution by administrators outside normal policy
     - Scheduled tasks or automation scripts using built-in Windows binaries
