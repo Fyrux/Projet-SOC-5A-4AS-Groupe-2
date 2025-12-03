@@ -1,4 +1,5 @@
 title: Suspicious New Service Creation
+version : 2
 description: Detects creation of a new service via "sc" command or the powershell "new-service" cmdlet with suspicious binary paths
 tags:
     - attack.persistence
